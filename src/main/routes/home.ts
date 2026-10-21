@@ -2,15 +2,22 @@ import axios from 'axios';
 import { Application } from 'express';
 
 export default function (app: Application): void {
-  app.get('/', async (req, res) => {
+  app.get('/', (req, res) => {
+    res.render('home');
+  });
+
+  app.get('/get-example-case', async (req, res) => {
     try {
-      // An example of connecting to the backend (a starting point)
-      const response = await axios.get('http://localhost:4000/get-example-case');
-      console.log(response.data);
+      const response = await axios.get('http://localhost:4000/get-example-case', { timeout: 5000 });
+      if (!response.data || typeof response.data !== 'object' || Array.isArray(response.data) || !response.data.id) {
+        throw new Error('The backend returned an invalid example case');
+      }
       res.render('home', { example: response.data });
     } catch (error) {
-      console.error('Error making request:', error);
-      res.render('home', {});
+      console.error('Error fetching example case:', error);
+      res.status(502).render('home', {
+        error: 'The example case could not be loaded. Please try again.',
+      });
     }
   });
 }

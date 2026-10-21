@@ -1,121 +1,55 @@
-{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
-
 {% extends "template.njk" %}
 
-<!-- You may want to make further use of these components: https://design-system.service.gov.uk/components/
-but ultimately it is up to you -->
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% block content %}
   <h1 class="govuk-heading-xl">Welcome to your dev test!</h1>
 
-  <!-- The freedom is yours. You can design the solution however you like, however there is a starting point provided
-  to ensure you have both services running. You may want to make use of the Gov UK Components:
-  https://design-system.service.gov.uk/components/ to add tabs and so forth :) -->
+  {% if error %}
+    {{ govukErrorSummary({
+      titleText: "There is a problem",
+      errorList: [{ text: error, href: "#get-example-case" }]
+    }) }}
+  {% endif %}
 
-  {% if example.id %}
+  <form action="/get-example-case" method="get">
+    {{ govukButton({
+      text: "Get example case",
+      attributes: { id: "get-example-case" }
+    }) }}
+  </form>
 
+  {% if example %}
+    <h2 class="govuk-heading-l">Example case</h2>
     {{ govukSummaryList({
       rows: [
         {
-          key: {
-            text: "ID"
-          },
-          value: {
-            text: example.id
-          },
-          actions: {
-            items: [
-              {
-                href: "#",
-                text: "Change",
-                visuallyHiddenText: "change case id ?!"
-              }
-            ]
-          }
+          key: { text: "ID" },
+          value: { text: example.id }
         },
         {
-          key: {
-            text: "Case Number"
-          },
-          value: {
-            text: example.caseNumber
-          },
-          actions: {
-            items: [
-              {
-                href: "#",
-                text: "Change",
-                visuallyHiddenText: "change case number"
-              }
-            ]
-          }
+          key: { text: "Case number" },
+          value: { text: example.caseNumber }
         },
         {
-          key: {
-            text: "Title"
-          },
-          value: {
-            html: example.title
-          },
-          actions: {
-            items: [
-              {
-                href: "#",
-                text: "Change",
-                visuallyHiddenText: "change case title"
-              }
-            ]
-          }
+          key: { text: "Title" },
+          value: { text: example.title }
         },
         {
-          key: {
-            text: "Description"
-          },
-          value: {
-            html: example.description
-          },
-          actions: {
-            items: [
-               {
-                 href: "#",
-                 text: "Delete",
-                 visuallyHiddenText: "Delete description"
-               },
-               {
-                 href: "#",
-                 text: "Change",
-                 visuallyHiddenText: "Change description"
-               }
-            ]
-          }
+          key: { text: "Description" },
+          value: { text: example.description }
         },
         {
-          key: {
-            text: "Status"
-          },
-          value: {
-            html: example.status
-          },
-          actions: {
-            items: [
-            ]
-          }
+          key: { text: "Status" },
+          value: { text: example.status }
         },
         {
-          key: {
-           text: "Created Date"
-          },
-          value: {
-           html: example.createdDate
-          },
-          actions: {
-           items: [
-           ]
-          }
+          key: { text: "Created date" },
+          value: { text: example.createdDate }
         }
       ]
     }) }}
-
   {% endif %}
-
 {% endblock %}
